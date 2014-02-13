@@ -1,0 +1,29 @@
+apply plugin: 'android'
+
+repositories {
+    maven {
+        url "http://www.bugsense.com/gradle/"
+    }
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.0.1"
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 19
+    }
+
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.bugsense.trace:bugsense:3.6'
+    compile 'com.google.android.apps.dashclock:dashclock-api:+'
+}
