@@ -10,7 +10,7 @@ import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.CallLog.Calls;
+import android.provider.CallLog;
 import android.util.Log;
 
 import com.bugsense.trace.BugSenseHandler;
@@ -32,7 +32,7 @@ public class CallstatsWidget extends DashClockExtension {
 
 		if (!isReconnect) {
 
-			addWatchContentUris(new String[]{"content://call_log/calls"});
+			addWatchContentUris(new String[]{CallLog.Calls.CONTENT_URI.toString()});
 
 		}
 
@@ -104,7 +104,7 @@ public class CallstatsWidget extends DashClockExtension {
 			String strClause = android.provider.CallLog.Calls.DATE + " >= ?";
 			String[] strValues = {String.valueOf(calCalendar.getTimeInMillis())};
 
-			Cursor curCalls = getContentResolver().query(Uri.parse("content://call_log/calls"), null, strClause, strValues, null);
+			Cursor curCalls = getContentResolver().query(CallLog.Calls.CONTENT_URI, null, strClause, strValues, null);
 
 			Integer intIncoming = 0;
 			Integer intTotal = 0;
@@ -112,16 +112,16 @@ public class CallstatsWidget extends DashClockExtension {
 
 			while (curCalls != null && curCalls.moveToNext()) {
 
-				switch (curCalls.getInt(curCalls.getColumnIndex(Calls.TYPE))) {
+				switch (curCalls.getInt(curCalls.getColumnIndex(CallLog.Calls.TYPE))) {
 
-				case Calls.INCOMING_TYPE:
-					intIncoming = intIncoming + curCalls.getInt(curCalls.getColumnIndex(Calls.DURATION));
-					intTotal = intTotal + curCalls.getInt(curCalls.getColumnIndex(Calls.DURATION));
+				case CallLog.Calls.INCOMING_TYPE:
+					intIncoming = intIncoming + curCalls.getInt(curCalls.getColumnIndex(CallLog.Calls.DURATION));
+					intTotal = intTotal + curCalls.getInt(curCalls.getColumnIndex(CallLog.Calls.DURATION));
 					break;
 
-				case Calls.OUTGOING_TYPE:
-					intOutgoing = intOutgoing + curCalls.getInt(curCalls.getColumnIndex(Calls.DURATION));
-					intTotal = intTotal + curCalls.getInt(curCalls.getColumnIndex(Calls.DURATION));
+				case CallLog.Calls.OUTGOING_TYPE:
+					intOutgoing = intOutgoing + curCalls.getInt(curCalls.getColumnIndex(CallLog.Calls.DURATION));
+					intTotal = intTotal + curCalls.getInt(curCalls.getColumnIndex(CallLog.Calls.DURATION));
 					break;
 
 				}
